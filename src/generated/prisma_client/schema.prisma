@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma_client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int     @id @default(autoincrement())
+  did         String  @unique
+  handle      String
+  name        String?
+  description String?
+  isVtuber    Boolean @default(false)
+  posts       Post[]
+}
+
+model Post {
+  id       Int      @id @default(autoincrement())
+  cid      String   @unique
+  content  String
+  authorId Int
+  author   User     @relation(fields: [authorId], references: [id])
+  postedAt DateTime
+}
